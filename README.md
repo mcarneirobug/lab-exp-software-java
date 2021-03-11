@@ -1,12 +1,13 @@
 <h1 align="center">
     <span>Laboratório de Experimentação de Software</span>
 </h1>
+<p align="center">🚀 mineração de repositórios focado na linguagem Java para analise de métricas de software.</p>
 
-![Badge](https://img.shields.io/github/languages/top/mcarneirobug/lab-exp-software)
-![Badge](https://img.shields.io/github/issues-pr/mcarneirobug/lab-exp-software?logoColor=red)
-![Badge](https://img.shields.io/github/issues-pr-closed-raw/mcarneirobug/lab-exp-software)
-![Badge](https://img.shields.io/github/last-commit/mcarneirobug/lab-exp-software)
-![Badge](https://img.shields.io/github/contributors/mcarneirobug/lab-exp-software)
+![Badge](https://img.shields.io/github/languages/top/mcarneirobug/lab-exp-software-java)
+![Badge](https://img.shields.io/github/issues-pr/mcarneirobug/lab-exp-software-java?logoColor=red)
+![Badge](https://img.shields.io/github/issues-pr-closed-raw/mcarneirobug/lab-exp-software-java)
+![Badge](https://img.shields.io/github/last-commit/mcarneirobug/lab-exp-software-java)
+![Badge](https://img.shields.io/github/contributors/mcarneirobug/lab-exp-software-java)
 
 Tabela de conteúdos
 =================
@@ -87,9 +88,9 @@ Elabore um documento que apresente (i) uma introdução simples com hipóteses i
 
 ### :busts_in_silhouette: Alunos
 
-- Matheus Santos Rosa Carneiro.
-- Raíssa Carolina Vilela da Silva.
-- Vitor Augusto Alves de Jesus.
+- <a href="https://github.com/mcarneirobug" target="_blank">Matheus Santos Rosa Carneiro</a>.
+- <a href="https://github.com/raissavilela" target="_blank">Raíssa Carolina Vilela da Silva</a>.
+- <a href="https://github.com/ovitorj" target="_blank">Vitor Augusto Alves de Jesus</a>.
 
 ### :bust_in_silhouette: Professor responsável
 
