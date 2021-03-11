@@ -18,6 +18,9 @@ QUERY = """
         nameWithOwner
         url
         createdAt
+        primaryLanguage {
+          name
+        }
         languages(orderBy: {field: SIZE, direction: DESC}, first: 1) {
           totalSize
           totalCount
