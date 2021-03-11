@@ -12,7 +12,7 @@ Tabela de conteúdos
 =================
 <!--ts-->
    * [Sobre o projeto](#page_facing_up-sobre-o-projeto)
-   * [Metodologia](#hammer-metodologia)
+   * [Metodologia](#----hammer-metodologia)
       * [Seleção de Repositórios](#bulb-1-seleção-de-repositórios)
       * [Questões de pesquisa](#dart-2-questões-de-pesquisa)
       * [Definição de Métricas](#sparkles-3-definição-de-métricas)
