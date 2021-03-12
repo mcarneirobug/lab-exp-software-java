@@ -46,6 +46,25 @@ def clean_repository(path_folder):
         print(f'\nThe directory {path_folder} cannot be deleted. Erase manually!')
 
 
+'''
+A função precisa de criar uma pasta para armazenar os arquivos csv gerados 
+para cada repositório analisado e concluir a lógica para caso 
+ocorrer alguma exceção.
+
+Atualmente ela salva o arquivo no mesmo lugar que está o jar
+'''
+
+
+def call_ck_metrics(project_dir):
+    try:
+        success = os.system("java -jar ck-0.6.4-SNAPSHOT-jar-with-dependencies.jar %s true" % project_dir)
+        if success != 0:
+            raise Exception("Error when apply metrics...")
+        return success == 0
+    except Exception as e:
+        print(e)
+
+
 def clone_repository(git_path, directory_path):
     print("\n" + f'Starting the git clone: {git_path}')
     try:
@@ -113,6 +132,8 @@ def export_to_csv(data):
         git_path = node['url'] + ".git"  # ex: https://github.com/mcarneirobug/lab-exp-software-java.git
         clone_repository(git_path, repo_path)
 
+        call_ck_metrics(repo_path)
+
         total_src_loc = 0
         total_loc = 0
         total_blank_loc = 0
@@ -173,7 +194,7 @@ def run():
     nodes = response["data"]["search"]["nodes"]
 
     # 5 repositories * 200 pages = 1000 repositories
-    while total_pages < 3 and has_next_page:
+    while total_pages < 1 and has_next_page:
         total_pages += 1
         print(f'Page -> {total_pages}')
         next_query = constant.QUERY.replace("{AFTER}", ', after: "%s"' % current_final_cursor)
