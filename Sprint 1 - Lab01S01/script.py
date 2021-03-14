@@ -9,6 +9,7 @@ import os.path
 import shutil
 import stat
 from python_loc_counter import LOCCounter
+import pandas as pd
 
 
 # The function responsible for making requests in GitHub API
@@ -46,18 +47,10 @@ def clean_repository(path_folder):
         print(f'\nThe directory {path_folder} cannot be deleted. Erase manually!')
 
 
-'''
-A função precisa de criar uma pasta para armazenar os arquivos csv gerados 
-para cada repositório analisado e concluir a lógica para caso 
-ocorrer alguma exceção.
-
-Atualmente ela salva o arquivo no mesmo lugar que está o jar
-'''
-
-
 def call_ck_metrics(project_dir):
+    print(f'\nCalculating metrics using ck...')
     try:
-        success = os.system("java -jar ck-0.6.4-SNAPSHOT-jar-with-dependencies.jar %s true" % project_dir)
+        success = os.system("java -jar ck-0.6.4-SNAPSHOT-jar-with-dependencies.jar %s 1 0 0" % project_dir)
         if success != 0:
             raise Exception("Error when apply metrics...")
         return success == 0
@@ -65,8 +58,12 @@ def call_ck_metrics(project_dir):
         print(e)
 
 
+def calculate_age_repository(datetime_created_at):
+    return relativedelta.relativedelta(datetime.now(), datetime_created_at).years
+
+
 def clone_repository(git_path, directory_path):
-    print("\n" + f'Starting the git clone: {git_path}')
+    print(f'\nStarting the git clone: ({git_path})')
     try:
         success = os.system("git clone --depth 1 %s %s" % (git_path, directory_path))
         if success != 0:
@@ -77,7 +74,7 @@ def clone_repository(git_path, directory_path):
         print(f'\nTrying again...')
         clone_success = retry_clone_repository(git_path, directory_path)  # trying to clone again
         number_retries = 1
-        retries = 10
+        retries = 5
         while not clone_success and number_retries <= retries:
             clone_success = retry_clone_repository(git_path, directory_path)
             number_retries += 1
@@ -105,21 +102,31 @@ def csv_header():
                         + "Total Source LOC" + ";"
                         + "Total Line LOC" + ";"
                         + "Total Blank LOC" + ";"
-                        + "Total Comments LOC" + "\n")
+                        + "Total Comments LOC" + ";"
+                        + "CBO" + ";"
+                        + "DIT" + ";"
+                        + "WMC" + ";"
+                        + "LOC" +
+                        "\n")
+
+
+def isPrimaryLanguage(node):
+    if node['primaryLanguage'] is None:
+        return "None"
+    else:
+        return str(node['primaryLanguage']['name'])
 
 
 def export_to_csv(data):
     path = os.getcwd() + "\\" + constant.PATH_CSV
     urls_git_to_save_file = ""
     num_repositories = 0
+    result = {'source_loc': 0, 'single_comments_loc': 0, 'single_docstring_loc': 0,
+              'double_docstring_loc': 0, 'total_comments_loc': 0, 'blank_loc': 0, 'total_line_count': 0,
+              'cbo': 0, 'dit': 0, 'wmc': 0, 'loc': 0}
     for node in data:
-        if node['primaryLanguage'] is None:
-            primary_language = "None"
-        else:
-            primary_language = str(node['primaryLanguage']['name'])
 
         datetime_created_at = datetime.strptime(node['createdAt'], '%Y-%m-%dT%H:%M:%SZ')
-        repository_age = relativedelta.relativedelta(datetime.now(), datetime_created_at).years
 
         urls_git_to_save_file += node['url'] + '\n'  # to save urls at .txt file
 
@@ -133,11 +140,8 @@ def export_to_csv(data):
         clone_repository(git_path, repo_path)
 
         call_ck_metrics(repo_path)
-
-        total_src_loc = 0
-        total_loc = 0
-        total_blank_loc = 0
-        total_comment_loc = 0
+        metrics_df = pd.read_csv(os.path.abspath(os.getcwd()) + "/class.csv", usecols=['cbo', 'dit', 'wmc', 'loc'])
+        medians = metrics_df.median(skipna=True)
 
         if os.path.exists(repo_path):
             for root, dirs, files in os.walk(repo_path):
@@ -146,16 +150,20 @@ def export_to_csv(data):
                     try:
                         counter = LOCCounter(full_path)
                         loc_data = counter.getLOC()
+                        for key in loc_data:
+                            if key in result:
+                                result[key] += loc_data[key]
+                            else:
+                                result[key] += loc_data[key]
                     except Exception as e:
                         print(e)
                         print(f'Error to read file {full_path}. Trying read again...')
                         continue
 
-                    total_src_loc += loc_data['source_loc']  # Everything that's not a comment or blank line
-                    total_loc += loc_data['total_line_count']  # Typical line count
-                    total_blank_loc += loc_data['blank_loc']  # Any whitespace designated only with string.whitespace
-                    total_comment_loc += loc_data['total_comments_loc']
-
+                    result['cbo'] = medians['cbo']
+                    result['dit'] = medians['dit']
+                    result['wmc'] = medians['wmc']
+                    result['loc'] = medians['loc']
                     print(loc_data)
 
         clean_repository(repo_path)
@@ -163,15 +171,19 @@ def export_to_csv(data):
         with open(path, 'a+') as csv_final:
             csv_final.write(node['nameWithOwner'] + ";"
                             + node['url'] + ";"
-                            + primary_language + ";"
+                            + isPrimaryLanguage(node) + ";"
                             + datetime_created_at.strftime('%d/%m/%y %H:%M:%S') + ";"
-                            + str(repository_age) + ";"
+                            + str(calculate_age_repository(datetime_created_at)) + ";"
                             + str(node['stargazers']['totalCount']) + ";"
                             + str(node['releases']['totalCount']) + ";"
-                            + str(total_src_loc) + ";"
-                            + str(total_loc) + ";"
-                            + str(total_blank_loc) + ";"
-                            + str(total_comment_loc)
+                            + str(result['source_loc']) + ";"
+                            + str(result['total_line_count']) + ";"
+                            + str(result['blank_loc']) + ";"
+                            + str(result['total_comments_loc']) + ";"
+                            + str(result['cbo']) + ";"
+                            + str(result['dit']) + ";"
+                            + str(result['wmc']) + ";"
+                            + str(result['loc'])
                             + "\n")
     export_urls_to_txt(urls_git_to_save_file)
 
