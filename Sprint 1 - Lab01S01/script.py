@@ -190,7 +190,7 @@ def export_to_csv(data):
 
 def run():
     # The flag is responsible for replacing the cursor on the next page
-    final_query = constant.QUERY.replace("{AFTER}", "")
+    final_query = constant.QUERY.replace("{AFTER}", "Y3Vyc29yOjQwMA==")
 
     json = {
         "query": final_query, "variables": {}
@@ -206,10 +206,10 @@ def run():
     nodes = response["data"]["search"]["nodes"]
 
     # 5 repositories * 200 pages = 1000 repositories
-    while total_pages < 1 and has_next_page:
+    while total_pages < 100 and has_next_page:
         total_pages += 1
         print(f'Page -> {total_pages}')
-        next_query = constant.QUERY.replace("{AFTER}", ', after: "%s"' % current_final_cursor)
+        next_query = constant.QUERY.replace("{AFTER}", "%s" % current_final_cursor)
         json["query"] = next_query
         response = run_github_query(json)
         # Increase the output
