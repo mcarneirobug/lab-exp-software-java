@@ -42,4 +42,4 @@ QUERY = """
   }
 }
 """
-PATH_CSV = 'output_github.csv'
+PATH_CSV = '/output_github.csv'

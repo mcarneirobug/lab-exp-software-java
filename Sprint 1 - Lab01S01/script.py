@@ -41,6 +41,7 @@ def on_rm_error(func, path, exc_info):
 # The function delete an entire directory tree
 def clean_repository(path_folder):
     try:
+        os.system("rm -f %s" % path_folder)
         shutil.rmtree(path_folder, onerror=on_rm_error)
     except Exception as e:
         print(e)
@@ -90,7 +91,7 @@ def retry_clone_repository(git_path, directory_path):
 
 
 def csv_header():
-    path = os.getcwd() + "\\" + constant.PATH_CSV
+    path = os.getcwd() + constant.PATH_CSV
     with open(path, 'w+') as csv_final:
         csv_final.write("Name" + ";"
                         + "URL" + ";"
@@ -118,7 +119,7 @@ def isPrimaryLanguage(node):
 
 
 def export_to_csv(data):
-    path = os.getcwd() + "\\" + constant.PATH_CSV
+    path = os.path.abspath(os.getcwd()) + constant.PATH_CSV
     urls_git_to_save_file = ""
     num_repositories = 0
     result = {'source_loc': 0, 'single_comments_loc': 0, 'single_docstring_loc': 0,
@@ -130,7 +131,7 @@ def export_to_csv(data):
 
         urls_git_to_save_file += node['url'] + '\n'  # to save urls at .txt file
 
-        repo_path = f'repository\\java\\{str(num_repositories)}'
+        repo_path = r'repository/java/%s' % str(num_repositories)
         if os.path.exists(repo_path):
             clean_repository(repo_path)
 
@@ -206,7 +207,7 @@ def run():
     nodes = response["data"]["search"]["nodes"]
 
     # 5 repositories * 200 pages = 1000 repositories
-    while total_pages < 1 and has_next_page:
+    while total_pages < 100 and has_next_page:
         total_pages += 1
         print(f'Page -> {total_pages}')
         next_query = constant.QUERY.replace("{AFTER}", ', after: "%s"' % current_final_cursor)
