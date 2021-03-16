@@ -78,9 +78,9 @@ Elabore um documento que apresente (i) uma introdução simples com hipóteses i
 
 ### :octocat: Processo de desenvolvimento
 
-- [ ] Lab01S01: Lista dos 1000 repositórios Java + Script de Automação de clone e Coleta de Métricas (**6 pontos**)
+- [X] Lab01S01: Lista dos 1000 repositórios Java + Script de Automação de clone e Coleta de Métricas (**6 pontos**)
 
-- [ ] Lab01S02: Arquivo csv com o resultado de todas as medições (**7 pontos**) 
+- [X] Lab01S02: Arquivo csv com o resultado de todas as medições (**7 pontos**) 
 
 - [ ] Lab01S03: Análise de dados + elaboração do relatório final (**7 pontos**) 
 
@@ -97,5 +97,5 @@ Elabore um documento que apresente (i) uma introdução simples com hipóteses i
 - Jose Laerte Pires Xavier Junior.
 
 <h4 align="center"> 
-	🚧  Spring 1 🚀 Em progresso ...  🚧
+	🚧  Spring 3 🚀 Em progresso ...  🚧
 </h4>
