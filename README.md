@@ -82,7 +82,7 @@ Elabore um documento que apresente (i) uma introdução simples com hipóteses i
 
 - [X] Lab01S02: Arquivo csv com o resultado de todas as medições (**7 pontos**) 
 
-- [ ] Lab01S03: Análise de dados + elaboração do relatório final (**7 pontos**) 
+- [X] Lab01S03: Análise de dados + elaboração do relatório final (**7 pontos**) 
 
 `Prazo final: **31/03** | Valor total: **20 pontos** | Desconto de **0.5 pontos** por dia de atraso.`
 
