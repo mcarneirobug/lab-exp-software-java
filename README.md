@@ -97,5 +97,5 @@ Elabore um documento que apresente (i) uma introdução simples com hipóteses i
 - Jose Laerte Pires Xavier Junior.
 
 <h4 align="center"> 
-	🚧  Spring 3 🚀 Em progresso ...  🚧
+	🚧  Spring 3 🚀 Finalizado ...  🚧
 </h4>
